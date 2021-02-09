@@ -6,8 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Parallax Template - Materialize</title>
 
-  <!-- CSS  -->
-  <link href="css/icon.css" rel="stylesheet">
+  <!-- CSS -->
+  <link href="css/icon.css" rel=" stylesheet">
   <link href="css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection" />
   <link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection" />
 </head>
@@ -17,35 +17,63 @@
     <div class="nav-wrapper container">
       <a id="logo-container" href="#" class="brand-logo">Logo</a>
       <ul class="right hide-on-med-and-down">
-        <li><a class="contatos">Contatos</a></li>
+        <li><a class="contatos">Contato</a></li>
         <li><a class="sobre">Sobre</a></li>
       </ul>
 
       <ul id="nav-mobile" class="sidenav">
-        <li><a class="contatos">Contatos</a></li>
+        <li><a class="contatos">Contato</a></li>
         <li><a class="sobre">Sobre</a></li>
       </ul>
       <a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>
     </div>
   </nav>
-      
-      </div>
-    </div>
+
+  <div class="container center" id="conteudo">
+    <h5>Lista de usuário</h5>
+    <table>
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>Telefone</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% for(let {nome, telefone, id} of data) {%>
+          <tr>
+            <td>
+              <%=nome%>
+            </td>
+            <td>
+              <%=telefone%>
+            </td>
+            <td>
+              <a class="editar" name="/editar_contato?<%=id%>"><i class="material-icons">edit</i></a>
+              <i class="material-icons">delete</i>
+            </td>
+          </tr>
+          <%}%>
+      </tbody>
+    </table>
+
     
-  </div>
-  <div class="container center" id="conteudo" >
-    <h3>Lista de Usuarios</h3>
+
   </div>
 
-  <!--  Scripts-->
+
+  <!-- Scripts-->
   <script src="js/jquery-3.2.1.min.js"></script>
-  <script src="js/jquery.form.min.js"></script>
+  <script src="js/jquery-form.min.js"></script>
   <script src="js/materialize.js"></script>
   <script src="js/init.js"></script>
 
 </body>
+
 <script>
-  //rota contatos
+
+  // contatos
   $('.contatos').click(function () {
     $.ajax({
       url: '/contatos',
@@ -55,19 +83,30 @@
       }
     })
   })
-
-  //rota sobre
-  $('.sobre').click(function () {
+  // sobre
+  $('.editar').click(function () {
+    // console.log($(this).attr("name"))
     $.ajax({
-      url: '/sobre',
+      url: $(this).attr("name"),
       method: 'get',
       success: function (data) {
         $('#conteudo').html(data)
       }
     })
   })
+  // salvar usuario
+  $('#enviar').click(function () {
+    $('#form').ajaxForm({
+      url: '/salvar_usuario',
+      type: 'post',
+      success: function (data) {
+        $('#resultado').html(data)
+        // document.getElementById('resultado').innerHTML = data
+        console.log('Dados salvos: ', data)
+      }
+    }).submit();
+  })
 
- 
 </script>
 
 </html>
